@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <title>Rose</title>
+        <link href="nouislider.min.css" rel="stylesheet">
+        <style>
+            body {
+                margin: 0px;
+                background-color: #ffffff;
+                overflow: hidden;
+                font: 16px Helvetica Neue, Helvetica, Arial, sans-serif;
+            }
+            .drawing {
+                position: absolute;
+                text-align: center;
+                width: 100%;
+            }
+            .container {
+                position: absolute;
+                width: 100%;
+                text-align: center;
+            }
+            .line {
+                margin-bottom: 30px;
+            }
+            .lbl {
+                width: 70px;
+                display: inline-block;
+                text-align: left;
+            }
+            .slider {
+                display: inline-block;
+                vertical-align: middle;
+                width: calc(100vw - 100px);
+            }
+            .noUi-handle {
+                background: #00A1FF;
+                box-shadow: none;
+            }
+        </style>
+        <script src="svg.min.js"></script>
+        <script src="nouislider.min.js"></script>
+        <script type="text/javascript">
+            var g_rose = null;
+            var g_coords = null;
+            var g_polygon = null;
+            var g_size = 0;
+            var g_morphN = null;
+            var g_morphD = null;
+
+            function gcd(x, y)
+            {
+                x = Math.abs(x);
+                y = Math.abs(y);
+                while (y !== 0) {
+                    const t = y;
+                    y = x % y;
+                    x = t;
+                }
+                return x;
+            }
+
+            function simplify(n, d)
+            {
+                const r = n / d;
+                if (r === Math.floor(r))
+                    return { numerator: r, denominator: 1, result: r };
+                else {
+                    const g = gcd(n, d);
+                    return { numerator: n / g, denominator: d / g, result: r };
+                }
+            }
+
+            function genRose(n, d, coords)
+            {
+                var piF = 2;
+                var k = 0;
+                if (n !== d) {
+                    var rat = simplify(n, d);
+                    k = rat.result;
+                    var p = (rat.numerator * rat.denominator) % 2 === 0 ? 2 : 1;
+                    piF = p * rat.denominator;
+                }
+                const res = coords.length;
+                const angleRes = piF * Math.PI / (res - 1);
+                for (var i = 0; i < res; ++i) {
+                    var angle = angleRes * i;
+                    var c = Math.cos(k * angle);
+                    coords[i][0] = c * Math.cos(angle);
+                    coords[i][1] = c * Math.sin(angle);
+                }
+            }
+
+            function render(anim)
+            {
+                const nVal = Math.floor(g_morphN.noUiSlider.get());
+                const dVal = Math.floor(g_morphD.noUiSlider.get());
+                document.getElementById("valN").innerHTML = nVal;
+                document.getElementById("valD").innerHTML = dVal;
+                genRose(nVal, dVal, g_coords);
+                for (var i = 0, n = g_coords.length; i < n; ++i) {
+                    g_coords[i][0] = (g_coords[i][0] + 1) * (g_size - 20) / 2 + 10;
+                    g_coords[i][1] = (g_coords[i][1] + 1) * (g_size - 20) / 2 + 10;
+                }
+                if (anim)
+                    g_polygon.animate(1000, 0, "now").plot(g_coords);
+                else
+                    g_polygon.animate(1, 0, "now").plot(g_coords);
+            }
+
+            function reshapeDeferred()
+            {
+                setTimeout(reshape, 500);
+            }
+
+            function reshape()
+            {
+                g_size = Math.min(window.innerWidth, window.innerHeight - 130);
+                g_rose.size(g_size, g_size);
+                document.getElementById("cont").style.top = (window.innerHeight - 100) + "px";
+                render(false);
+            }
+
+            function renderAnim()
+            {
+                render(true);
+            }
+
+            function main()
+            {
+                window.addEventListener("resize", reshapeDeferred, false);
+                window.addEventListener("orientationchange", reshapeDeferred);
+
+                g_morphN = document.getElementById("morphN");
+                g_morphD = document.getElementById("morphD");
+
+                noUiSlider.create(g_morphN, {
+                    start: [1],
+                    step: 1,
+                    range: {
+                        'min': 1,
+                        'max': 10
+                    }
+                });
+
+                noUiSlider.create(g_morphD, {
+                    start: [1],
+                    step: 1,
+                    range: {
+                        'min': 1,
+                        'max': 10
+                    }
+                });
+
+                g_rose = SVG().addTo("#rose");
+
+                g_coords = [];
+                for (var i = 0; i < 1000; ++i) {
+                    g_coords.push([0, 0]);
+                }
+
+                g_polygon = g_rose.polygon(g_coords).fill("none").stroke({ color: '#f06', width: 3 });
+
+                reshape();
+
+                g_morphD.noUiSlider.on("update", renderAnim);
+                g_morphN.noUiSlider.on("update", renderAnim);
+            }
+        </script>
+    </head>
+    <body onload="main();">
+        <div class="drawing" id="rose"></div>
+        <div class="container" id="cont">
+            <div class="line">
+                <span class="lbl"><i>N</i> = <span id="valN">1</span></span>
+                <div class="slider" id="morphN"></div>
+            </div>
+            <div class="line">
+                <span class="lbl"><i>D</i> = <span id="valD">1</span></span>
+                <div class="slider" id="morphD"></div>
+            </div>
+        </div>
+    </body>
+</html>

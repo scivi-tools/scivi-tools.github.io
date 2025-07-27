@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>SciVi</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                margin: 0px;
+                background-color: #ffffff;
+                overflow: hidden;
+            }
+            .loading { 
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                margin: auto;
+                text-align: center;
+                font: 36px Helvetica Neue, Helvetica, Arial, sans-serif;
+                -webkit-transform: translateY(-50%);
+                -ms-transform: translateY(-50%);
+                transform: translateY(-50%);
+            }
+            .slider {
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                font: 12px Helvetica Neue, Helvetica, Arial, sans-serif;
+                display: table-cell;
+                vertical-align: middle;
+                height: 30px;
+            }
+            .lbl {
+                vertical-align:middle;
+            }
+        </style>
+
+        <script src="three.min.js"></script>
+        <script src="PLYLoader.js"></script>
+        <script src="OrbitControls.js"></script>
+        <script src="jquery.min.js"></script>
+
+        <script>
+
+            var g_camera;
+            var g_scene;
+            var g_renderer;
+            var g_root;
+            var g_fox;
+
+            function main()
+            {
+                g_camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+                g_camera.position.y = 3;
+                var fov = 45.0 * Math.PI / 180.0;
+                var horizontalSize = 6.0;
+                var curDist = Math.max(7, horizontalSize / 2.0 / Math.tan(fov * g_camera.aspect / 2.0));
+                g_camera.position.z = curDist;
+
+                g_scene = new THREE.Scene();
+                g_scene.visible = false;
+
+                g_root = new THREE.Object3D();
+                g_scene.add(g_root);
+
+                var matcap = new THREE.TextureLoader().load("matcap.png");
+
+                var polarLoader = new THREE.PLYLoader();
+                polarLoader.load("polar.ply", function (polar) {
+                    polar.morphAttributes.position = [];
+                    var equatorialLoader = new THREE.PLYLoader();
+                    equatorialLoader.load("equatorial.ply", function (equatorial) {
+                        polar.morphAttributes.position[0] = equatorial.getAttribute("position");
+                        var material = new THREE.MeshMatcapMaterial({ color: 0xffffff, morphTargets: true, side: THREE.DoubleSide, matcap: matcap });
+                        g_fox = new THREE.Mesh(polar, material);
+                        g_fox.rotation.x = -3.14 / 2.0;
+                        g_fox.scale.set(1.5, 1.5, 1.5);
+                        g_root.add(g_fox);
+                        g_scene.visible = true;
+                        $(".loading").fadeOut(1000);
+                        $(".slider").show();
+                        render();
+                    });
+                });
+
+                g_renderer = new THREE.WebGLRenderer({antialias: true});
+                g_renderer.setClearColor(0xffffff);
+                g_renderer.setPixelRatio(window.devicePixelRatio);
+                g_renderer.shadowMap.enabled = true;
+                g_renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                $("body").append(g_renderer.domElement);
+
+                var controls = new THREE.OrbitControls(g_camera, g_renderer.domElement);
+                controls.minDistance = 0.5;
+                controls.maxDistance = Math.max(10, curDist * 1.2);
+
+                window.addEventListener("resize", reshape, false);
+
+                $("#morph").on("input", function () {
+                    g_fox.morphTargetInfluences[0] = $("#morph").val();
+                    render();
+                });
+
+                var inDrag = false;
+                var py = 0;
+                $("body").on("keydown", function (ev) {
+                    if (ev.key === "Shift")
+                        controls.enabled = false;
+                });
+                $("body").on("keyup", function (ev) {
+                    if (ev.key === "Shift")
+                        controls.enabled = true;
+                });
+                $("body").on("mousedown", function (ev) {
+                    inDrag = true;
+                    py = ev.clientY;
+                });
+                $("body").on("mouseup", function () {
+                    inDrag = false;
+                });
+                $("body").on("mousemove", function (ev) {
+                    if (inDrag) {
+                        if (!controls.enabled) {
+                            g_root.rotation.z -= ((ev.clientY - py) / window.innerHeight) * Math.PI * 2;
+                            py = ev.clientY;
+                        }
+                        render();
+                    }
+                });
+                g_renderer.domElement.addEventListener("wheel", function (ev) { render(); }, false);
+                g_renderer.domElement.addEventListener("touchmove", function (ev) { render(); }, false);
+                g_renderer.domElement.addEventListener("touchstart", function (ev) { render(); }, false);
+                g_renderer.domElement.addEventListener("touchend", function (ev) { render(); }, false);
+
+                reshape();
+            }
+
+            function reshape()
+            {
+                g_camera.aspect = window.innerWidth / window.innerHeight;
+                g_camera.updateProjectionMatrix();
+
+                g_renderer.setSize(window.innerWidth, window.innerHeight);
+
+                $(".slider").css("top", (window.innerHeight - 40) + "px");
+                $("#morph").css("width", (window.innerWidth > 600 ? 300 : window.innerWidth - 200) + "px");
+
+                render();
+            }
+
+            function render() 
+            {
+                g_renderer.render(g_scene, g_camera);
+            }
+        </script>
+    </head>
+
+    <body onload="main();">
+
+        <div class="slider" style="display: none;">
+            <span class="lbl">Polar</span>
+            <input class="lbl" type="range" min="0" max="1" step="0.01" value="0" id="morph"/>
+            <span class="lbl">Equatorial</span>
+        </div>
+        <div class="status"></div>
+        <div class="loading">Loading...</div>
+
+    </body>
+</html>
