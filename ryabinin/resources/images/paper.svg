@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0beta1 (32d4812, 2019-09-19)"
+   sodipodi:docname="paper.svg"
+   version="1.1"
+   viewBox="0 0 98.63 122.88"
+   data-name="Layer 1"
+   id="Layer_1">
+  <metadata
+     id="metadata842">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs840" />
+  <sodipodi:namedview
+     inkscape:current-layer="Layer_1"
+     inkscape:window-maximized="0"
+     inkscape:window-y="23"
+     inkscape:window-x="0"
+     inkscape:cy="90.084107"
+     inkscape:cx="64.958475"
+     inkscape:zoom="3.959798"
+     showgrid="false"
+     id="namedview838"
+     inkscape:window-height="860"
+     inkscape:window-width="1536"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     inkscape:document-rotation="0"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <title
+     id="title833">paper</title>
+  <path
+     style="fill:#ffffff"
+     id="path835"
+     d="M98.63,35.57A8.37,8.37,0,0,0,96,32.12L64.39,1.32A3.53,3.53,0,0,0,61.63,0H6.43A6.42,6.42,0,0,0,0,6.43v110a6.42,6.42,0,0,0,6.43,6.43H92.21a6.42,6.42,0,0,0,6.4-6.43V63.37h0V35.57Zm-33.43-23L86.68,32.69H65.2V12.57ZM49.75,115.7H7.18V7.15H58V36.26a3.61,3.61,0,0,0,3.61,3.61H91.45v23.5h0V115.7ZM20.47,53a2.58,2.58,0,0,1,1.87-.88H64.53a2.55,2.55,0,0,1,1.91.87,3,3,0,0,1,.76,2,3.08,3.08,0,0,1-.77,2,2.57,2.57,0,0,1-1.9.88H22.37a2.56,2.56,0,0,1-1.91-.87,3.1,3.1,0,0,1,0-4.08Zm0,40.77a2.53,2.53,0,0,1,1.9-.88H76.25a2.55,2.55,0,0,1,1.91.88,3.1,3.1,0,0,1,0,4.08,2.59,2.59,0,0,1-1.92.86H22.37a2.59,2.59,0,0,1-1.91-.86,3.1,3.1,0,0,1,0-4.08ZM76.25,72.52a2.59,2.59,0,0,1,1.91.88,3.1,3.1,0,0,1,0,4.08,2.57,2.57,0,0,1-1.92.87H22.37a2.56,2.56,0,0,1-1.91-.87,3.1,3.1,0,0,1,0-4.08,2.57,2.57,0,0,1,1.9-.88ZM20.47,32.63a2.57,2.57,0,0,1,1.9-.88H41.86a2.56,2.56,0,0,1,1.91.87,3,3,0,0,1,.76,2,3.07,3.07,0,0,1-.75,2l0,0a2.58,2.58,0,0,1-1.9.88H22.37a2.56,2.56,0,0,1-1.91-.87,3.1,3.1,0,0,1,0-4.08Z" />
+</svg>
