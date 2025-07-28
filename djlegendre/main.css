@@ -1,0 +1,218 @@
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.scale {
+    color: #888;
+    font-weight: normal;
+    margin-left: 10px;
+}
+
+.title {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+ .panel-c {
+     display: flex;
+     gap: 10px;
+     flex-direction: row;
+     flex-wrap: nowrap;
+     justify-content: center;
+     align-content: center;
+     padding-left: 10px;
+     padding-right: 10px;
+}
+
+.panel-l {
+     display: flex;
+     gap: 10px;
+     flex-direction: row;
+     flex-wrap: wrap;
+     justify-content: left;
+     align-items: center;
+     align-content: left;
+}
+
+.panel-e {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: left;
+}
+
+.large-gap {
+    row-gap: 25px;
+    column-gap: 50px;
+}
+
+.scrollable {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.panel-s {
+     display: flex;
+     gap: 10px;
+     flex-direction: column;
+     flex-wrap: nowrap;
+     justify-content: left;
+     align-items: left;
+     align-content: left;
+}
+
+.item {
+     flex: 0 1 auto;
+}
+
+.ctrl {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.numinput {
+    width: 60px;
+}
+
+.widenuminput {
+    width: 80px;
+}
+
+.shortnuminput {
+    width: 35px;
+}
+
+.surface-holder {
+    border: 1px solid gray;
+    border-radius: 10px;
+    height: calc(100% - 10px);
+    margin: 10px;
+    background: #f0f0f0;
+}
+
+.controls {
+    border: 1px solid gray;
+    border-radius: 10px;
+    height: calc(100vh - 90px);
+    overflow-y: auto;
+    padding: 10px;
+    margin: 10px;
+}
+
+.slider {
+    width: 280px;
+}
+
+.slider-label {
+    width: 120px;
+    gap: 2px;
+    flex-wrap: nowrap;
+}
+
+.listbox {
+    width: 200px;
+    height: 150px;
+    border: 1px solid gray;
+    overflow-y: auto;
+}
+
+.listbox-item {
+    color: #000;
+    background: #FFF;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.listbox-item-selected {
+    color: #FFF;
+    background: #6D9EBA;
+}
+
+.listbox-item-title {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.listbox-item-marker {
+    width: 10px;
+    height: 10px;
+    border: 1px solid #FFF;
+    background: hsl(360, 0%, 50%);
+    display: inline-block;
+}
+
+.listbox-item-visibility {
+    margin-left: 10px;
+    margin-right: 2px;
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border: solid 2px #7F7F7F;
+    border-radius:  75% 15%;
+    position: relative;
+    transform: rotate(45deg) translateY(3px);
+    background: #fff;
+    box-shadow: 0px 0px 1px 1px #FFF;
+}
+
+.listbox-item-visibility:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border: solid 2px #7F7F7F;
+    border-radius: 50%;
+    left: 2.5px;
+    top: 2.5px;
+    background: #fff;
+}
+
+.listbox-item-visibility-off {
+}
+
+.listbox-item-visibility-off:after {
+    content: "";
+    transform: translate(-3px, 5px);
+    width: 20px;
+    height: 3px;
+    background: #650E00;
+    display: block;
+}
+
+.split-horizontal {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 48px);
+}
+
+.split-vertical {
+    height: calc(100% - 10px);
+}
+
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+    cursor: col-resize;
+}
+
+.gutter.gutter-vertical {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    cursor: row-resize;
+}

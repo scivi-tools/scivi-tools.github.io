@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>DJ Legendre</title>
+        <link rel="stylesheet" href="main.css"/>
+        <script src="split.min.js"></script>
+        <script src="helpers.js"></script>
+        <script src="quat.js"></script>
+        <script src="calib.js"></script>
+        <script src="point.js"></script>
+        <script src="shape.js"></script>
+        <script src="shapelist.js"></script>
+        <script src="main.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body onload="main();">
+
+        <div class="title">
+            DJ Legendre: Calibration Model Mixer
+        </div>
+
+        <div class="split-horizontal">
+            <div id="splitLeftPane">
+                <div class="controls">
+                    <div><button onclick="reset();">Reset all</button></div>
+                    <div id="skeleton"></div>
+                </div>
+            </div>
+            <div id="splitRightPane">
+                <div class="split-vertical">
+                    <div id="splitTopPane">
+                        <div id="surfaceHolder" class="surface-holder">
+                            <svg id="surface" width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <marker id="arrowHead" viewBox="0 0 10 10" refX="5"refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z"/>
+                                    </marker>
+                                </defs>
+
+                                <style>
+                                    .label {
+                                        font: normal 25px sans-serif;
+                                    }
+                                </style>
+
+                                <g id="cmos0Axes">
+                                    <path id="cmos0arrowKappa" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 350 350 L 350 400"/>
+                                    <path id="cmos0arrowMu" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 350 350 L 400 350"/>
+                                    <text id="cmos0labelKappa" x="325" y="405" class="label">𝜅</text>
+                                    <text id="cmos0labelMu" x="395" y="335" class="label">𝜇</text>
+                                </g>
+
+                                <g id="cmos1Axes">
+                                    <path id="cmos1arrowKappa" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 650 350 L 600 350"/>
+                                    <path id="cmos1arrowMu" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 650 350 L 650 400"/>
+                                    <text id="cmos1labelKappa" x="590" y="335" class="label">𝜅</text>
+                                    <text id="cmos1labelMu" x="660" y="405" class="label">𝜇</text>
+                                </g>
+
+                                <g id="cmos2Axes">
+                                    <path id="cmos2arrowKappa" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 350 650 L 400 650"/>
+                                    <path id="cmos2arrowMu" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 350 650 L 350 600"/>
+                                    <text id="cmos2labelKappa" x="395" y="670" class="label">𝜅</text>
+                                    <text id="cmos2labelMu" x="325" y="605" class="label">𝜇</text>
+                                </g>
+
+                                <g id="cmos3Axes">
+                                    <path id="cmos3arrowKappa" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 650 650 L 650 600"/>
+                                    <path id="cmos3arrowMu" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 650 650 L 600 650"/>
+                                    <text id="cmos3labelKappa" x="660" y="605" class="label">𝜅</text>
+                                    <text id="cmos3labelMu" x="595" y="670"  class="label">𝜇</text>
+                                </g>
+
+                                <g id="fovrsAxes">
+                                    <path id="arrowEta" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 500 500 L 500 450"/>
+                                    <path id="arrowZeta" marker-end="url(#arrowHead)" stroke-width="3" fill="none" stroke="#000" d="M 500 500 L 450 500"/>
+                                    <text id="labelEta" x="480" y="455" class="label">𝜂</text>
+                                    <text is="labelZeta" x="445" y="530" class="label">𝜁</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <div id="splitBottomPane">
+                        <div class="panel-c large-gap scrollable">
+                            <div class="item">
+<!--                                 <div class="ctrl">
+                                    <div style="width: 175px">
+                                        The above picture is drawn<br/> in the <b>CMOS-2 detector pixel space</b>
+                                    </div>
+                                </div>
+ -->                                <div class="ctrl">
+                                    <button onclick="save();">▼ Save</button>
+                                    <button onclick="load();">▲ Load</button>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="ctrl">
+                                    <b>Constellation</b>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <div class="lbl">Rows count:</div>
+                                        <input class="numinput" id="rowNum" type="number" value="5" min="2" max="1000" onchange="updateAll();"/>
+                                    </div>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <div class="lbl">Columns count:</div>
+                                        <input class="numinput" id="colNum" type="number" value="5" min="2" max="1000" onchange="updateAll();"/>
+                                    </div>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <div>Stars per line:</div>
+                                        <input class="numinput" id="srcNum" type="number" value="10" min="2" max="10000" onchange="updateAll();"/>
+                                    </div>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <div>Phase Noise:</div>
+                                        <input class="numinput" id="phaseNoise" type="number" value="0" min="0" max="1" step="0.01" onchange="updateAll();"/>
+                                    </div>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <div>Stars count:</div>
+                                        <div id="srcCnt"></div>
+                                    </div>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <div>Stars visible:</div>
+                                        <div id="visSrcCnt"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="ctrl">
+                                    <b>Contents</b>
+                                </div>
+                                <div class="ctrl">
+                                    <div>
+                                        <div id="contents" class="listbox"></div>
+                                    </div>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <button id="addExposure" onclick="addExposure();" style="height: 24px">⊕ Add</button>
+                                        <button id="copyExposure" onclick="copyExposure();" style="height: 24px">⎘ Copy</button>
+                                        <button id="removeExposure" onclick="removeExposure();" style="height: 24px" disabled>✖ Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="ctrl">
+                                    <b>Export</b>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <div>Pixel constant shift:</div>
+                                        <input class="widenuminput" id="pixelShift" type="number" value="0" min="0" max="0.1" step="0.00001"/>
+                                    </div>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="panel-e">
+                                        <div>Pixel random noise:</div>
+                                        <input class="widenuminput" id="pixelNoise" type="number" value="0" min="0" max="0.1" step="0.00001"/>
+                                    </div>
+                                </div>
+                                <div class="ctrl">
+                                    <fieldset>
+                                        <legend>Detectors:</legend>
+                                        <div>
+                                            <input type="radio" id="cmos2" name="detectors" value="1" checked onchange="updateAll();"/>
+                                            <label for="cmos2">CMOS-2</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" id="cmos0123" name="detectors" value="4" onchange="updateAll();"/>
+                                            <label for="cmos0123">CMOS-0,1,2,3</label>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="ctrl">
+                                    <button onclick="exportData();" style="width: 110px; height: 25px;">⇩ Export data</button>
+                                    <button onclick="exportImage();" style="width: 110px; height: 25px;">✧ Export image</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
